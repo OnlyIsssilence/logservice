@@ -10,6 +10,8 @@ import com.onlyisssilence.muya.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ComponentScanBeanDefinitionParser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +54,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public AppointExecution appoint(long bookId, long studentId) {
         try {
+            ComponentScanBeanDefinitionParser beanDefinitionParser;
             // 减库存
             int update = bookDao.reduceNumber(bookId);
             if (update <= 0) {// 库存不足

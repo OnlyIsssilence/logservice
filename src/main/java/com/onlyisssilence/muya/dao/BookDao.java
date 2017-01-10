@@ -2,6 +2,7 @@ package com.onlyisssilence.muya.dao;
 
 import com.onlyisssilence.muya.entity.Book;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

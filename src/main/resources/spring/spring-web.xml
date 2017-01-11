@@ -22,7 +22,7 @@
         (2)允许使用"/"做整体映射
      -->
     <mvc:default-servlet-handler/>
-    <mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/"/>
+    <mvc:resources mapping="/**" location="/WEB-INF/"/>
 
 
     <!-- 3.配置jsp 显示ViewResolver -->
@@ -33,5 +33,5 @@
     </bean>
 
     <!-- 4.扫描web相关的bean -->
-    <context:component-scan base-package="com.onlyisssilence.muya.web" />
+    <context:component-scan base-package="com.onlyisssilence.muya.controller"/>
 </beans>

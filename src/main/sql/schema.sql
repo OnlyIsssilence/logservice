@@ -21,4 +21,32 @@ CREATE TABLE `appointment` (
   `appoint_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '预约时间' ,
   PRIMARY KEY (`book_id`, `student_id`),
   INDEX `idx_appoint_time` (`appoint_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约图书表'
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT = '预约图书表';
+
+-- 日志信息全量表
+
+DROP TABLE IF EXISTS `seed_log`;
+CREATE TABLE `seed_log` (
+  `log_id`      VARCHAR(20) NOT NULL DEFAULT ''
+  COMMENT '日志ID',
+  `city_code`   VARCHAR(20) NOT NULL
+  COMMENT '城市ID',
+  `version`     VARCHAR(20) NOT NULL
+  COMMENT '版本号',
+  `uid`         VARCHAR(40) NOT NULL
+  COMMENT '用户ID',
+  `seed_time`   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '埋点时间',
+  `create_time` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`log_id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT = '埋点日志表';
+
+-- 初始化图书数据
+INSERT INTO `seed_log` (`city_code`, `version`, `uid`)
+VALUES
+  (420100, '0.0.0', 2088010);

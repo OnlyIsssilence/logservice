@@ -9,7 +9,7 @@
     <url>http://maven.apache.org</url>
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/com.mangofactory/swagger-springmvc -->
+        <!-- swagger-springmvc -->
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>

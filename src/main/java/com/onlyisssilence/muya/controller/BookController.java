@@ -1,20 +1,19 @@
 package com.onlyisssilence.muya.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.onlyisssilence.muya.dto.AppointExecution;
 import com.onlyisssilence.muya.dto.Result;
 import com.onlyisssilence.muya.entity.Book;
+import com.onlyisssilence.muya.entity.SeedLog;
 import com.onlyisssilence.muya.service.BookService;
-import org.apache.ibatis.annotations.Param;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,75 +30,85 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    private String list(Model model) {
-        List<Book> list = bookService.getList();
-        model.addAttribute("list", list);
-        // list.jsp + model = ModelAndView
-        return "list";// WEB-INF/jsp/"list".jsp
-    }
 
-    // ajax json
-    @RequestMapping(value = "/{bookId}/detail", method = RequestMethod.GET)
+    /**
+     * 查询书单
+     *
+     * @param bookId  书单ID
+     * @param request
+     * @return 书单详细信息 返回的是book的json数据
+     */
     @ResponseBody
-    private String detail(@PathVariable("bookId") Long bookId, Model model) {
-        if (bookId == null) {
-            return "redirect:/book/list";
-        }
-        Book book = bookService.getById(bookId);
-        if (book == null) {
-            return "forward:/book/list";
-        }
-        model.addAttribute("book", book);
-        return "detail";
+    @RequestMapping(
+            value = "getBookById", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    @ApiOperation(value = "按照ID查询书单")
+    public String getBookById(@ApiParam(required = true, name = "bookId", value = "book id") @RequestParam(
+            value = "bookId") String bookId, HttpServletRequest request) {
+        Book book = bookService.getById(Integer.valueOf(bookId));
+
+        return JSON.toJSONString(book);
     }
 
-    @RequestMapping(value = "/{bookId}/appoint", method = RequestMethod.POST, produces = {
-            "application/json; charset=utf-8"})
-    private Result<AppointExecution> appoint(@PathVariable("bookId") Long bookId, @Param("studentId") Long studentId) {
-        if (studentId == null || studentId.equals("")) {
-            return new Result<AppointExecution>(false, "学号不能为空");
-        }
-        AppointExecution execution = bookService.appoint(bookId, studentId);
-        return new Result<AppointExecution>(true, execution);
+    /**
+     * 查询书单
+     * @param bookId 书单ID
+     * @param request
+     * @return 返回的是被包装之后的Result对象
+     */
+    @ResponseBody
+    @RequestMapping(
+            value = "getBookByIdBook", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    @ApiOperation(value = "按照ID查询书单")
+    public Result<Book> getBookByIdBook(@ApiParam(required = true, name = "bookId", value = "book id") @RequestParam(
+            value = "bookId") String bookId, HttpServletRequest request) {
+        Book book = bookService.getById(Integer.valueOf(bookId));
+
+        return new Result<Book>(0, "success",book);
+    }
+
+    /**
+     * 查询所有书单
+     *
+     * @param request
+     * @return 返回booklist对象
+     */
+    @ResponseBody
+    @RequestMapping(
+            value = "getAllBooks", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    @ApiOperation(value = "查询所有的书单")
+    public List<Book> getAllBooks(HttpServletRequest request) {
+        List<Book> bookList = bookService.getList();
+        return bookList;
+    }
+
+    /**
+     * 查询所有书单
+     * @param request
+     * @return 返回Result对象
+     */
+    @ResponseBody
+    @RequestMapping(
+            value = "getAllBooksResult", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+    @ApiOperation(value = "查询所有的书单")
+    public Result<List<Book>> getAllBooksResult(HttpServletRequest request) {
+        List<Book> bookList = bookService.getList();
+
+        return new Result<List<Book>>(0, "success", bookList);
     }
 
 
     /**
-     * 返回城市列表，当cityId未空值，返回一级列表，当cityId有值，返回二级列表
+     * 对对象的形式接收数据(seedLog对象)
      *
-     * @param response
+     * @param seedLog
      * @return
      */
-    @RequestMapping(value = "/getAllCity", method = RequestMethod.GET)
     @ResponseBody
-    public Object getAllCitys(@RequestParam(required = false) String userId, HttpServletResponse response) {
-
-
-        /* 设置回应头 */
-        setResponseHeader(response);
-
-        String result = null;
-
-        result = userId;
-
-        return JSON.toJSONString(result, SerializerFeature.WriteMapNullValue);
+    @RequestMapping(value = "addSingleLog", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @ApiOperation(value = "修改学生信息", httpMethod = "POST", notes = "学生信息以json格式传递", response = Result.class)
+    public Result<SeedLog> addSingleLog(@ApiParam(required = true) @RequestBody SeedLog seedLog,
+                                        @ApiParam(required = true) @RequestParam String seedId) {
+        System.out.println(seedId);
+        return new Result<SeedLog>(0, "success",seedLog);
     }
-
-    /**
-     * * 设置回应头信息
-     *
-     * @param response
-     */
-    private void setResponseHeader(HttpServletResponse response) {
-
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-
-        return;
-    }
-
 }

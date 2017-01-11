@@ -10,33 +10,43 @@ package com.onlyisssilence.muya.dto;
  */
 public class Result<T> {
 
-    private boolean success;// 是否成功标志
+    // 返回码，0表示成功，非0表示失败
+    private int resultCode;
 
-    private T data;// 成功时返回的数据
+    // 返回消息，成功为"success"，失败为具体失败信息
+    private String resultMessage;
 
-    private String error;// 错误信息
+    // 成功时返回的数据
+    private T data;
 
     public Result() {
     }
 
-    // 成功时的构造器
-    public Result(boolean success, T data) {
-        this.success = success;
+    public Result(int resultCode, String resultMessage, T data) {
         this.data = data;
+        this.resultCode = resultCode;
+        this.resultMessage = resultMessage;
     }
 
-    // 错误时的构造器
-    public Result(boolean success, String error) {
-        this.success = success;
-        this.error = error;
+    public Result(int resultCode, String resultMessage) {
+        this.resultCode = resultCode;
+        this.resultMessage = resultMessage;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public int getResultCode() {
+        return resultCode;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setResultCode(int resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public String getResultMessage() {
+        return resultMessage;
+    }
+
+    public void setResultMessage(String resultMessage) {
+        this.resultMessage = resultMessage;
     }
 
     public T getData() {
@@ -47,11 +57,4 @@ public class Result<T> {
         this.data = data;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
 }

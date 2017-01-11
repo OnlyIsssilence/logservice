@@ -13,6 +13,9 @@
     <!-- 扫描service包下所有使用注解的类型 -->
     <context:component-scan base-package="com.onlyisssilence.muya.service" />
 
+    <!--SpringSwaggerConfig类型的对象-->
+    <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig"/>
+
     <!-- 配置事务管理器 -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

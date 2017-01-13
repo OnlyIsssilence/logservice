@@ -37,8 +37,9 @@
     </select>
 
     <insert id="insert" parameterType="com.onlyisssilence.muya.entity.SeedLog">
-        insert into seed_log (city_code,version,uid,seed_time)
-        values (#{cityCode,jdbcType=VARCHAR},
+        insert into seed_log (log_id,city_code,version,uid,seed_time)
+        values (#{logId,jdbcType=VARCHAR},
+                #{cityCode,jdbcType=VARCHAR},
                 #{version,jdbcType=VARCHAR},
                 #{uid,jdbcType=VARCHAR},
                 #{seedTime,jdbcType=TIMESTAMP})

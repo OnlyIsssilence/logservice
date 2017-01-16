@@ -1,6 +1,7 @@
 package com.onlyisssilence.muya.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.onlyisssilence.muya.dto.Result;
 import com.onlyisssilence.muya.entity.SeedLog;
 import com.onlyisssilence.muya.service.SeedLogService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Author: MuYa
@@ -40,6 +42,9 @@ public class BookController {
 
         SeedLog seedLog = JSON.parseObject(singleLogJson, SeedLog.class);
 
+        String id = UUID.randomUUID().toString();
+
+        seedLog.setId(id);
         int ret = logService.insert(seedLog);
 
         return new Result<String>(0, "success", ret + "");
@@ -55,17 +60,32 @@ public class BookController {
     @RequestMapping(value = "addLogList", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
     @ApiOperation(value = "添加日志", httpMethod = "POST", notes = "添加多条日志数据", response = Result.class)
     public Result<String> addLogList(@ApiParam(required = true) @RequestParam String seedListJson) {
-        List<SeedLog> seedLogList = JSON.parseArray(seedListJson, SeedLog.class);
 
-        int size = seedLogList.size();
+        List<SeedLog> seedLogList;
 
-        for (SeedLog seedlog : seedLogList) {
-            logService.insert(seedlog);
+        try {
+            seedLogList = JSON.parseArray(seedListJson, SeedLog.class);
+        } catch (JSONException e) {
+            return new Result<String>(-1, "fail", "格式解析异常");
         }
 
-        return new Result<String>(0, "success", size + "");
-    }
+        if (seedLogList == null || seedLogList.size() == 0) {
+            return new Result<String>(0, "success", "日志数据为空");
+        }
 
+        try {
+            String id;
+            for (SeedLog seedlog : seedLogList) {
+                id = UUID.randomUUID().toString();
+                seedlog.setId(id);
+                logService.insert(seedlog);
+            }
+        } catch (Exception e) {
+            return new Result<String>(-1, "fail", "日志添加数据库异常");
+        }
+
+        return new Result<String>(0, "success", seedLogList.size() + "");
+    }
 
     /**
      * 根据id查询单条日志信息

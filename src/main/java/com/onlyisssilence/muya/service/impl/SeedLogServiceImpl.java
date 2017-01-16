@@ -21,6 +21,23 @@ public class SeedLogServiceImpl implements SeedLogService {
     private SeedLogMapper seedLogMapper;
 
     @Override
+    public boolean insertList(List<SeedLog> seedLogs) {
+        if (seedLogs == null || seedLogs.size() == 0) {
+            return false;
+        } else {
+            for (SeedLog seedlog : seedLogs) {
+                try {
+                    insert(seedlog);
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
     public int insert(SeedLog seedLog) {
         return seedLogMapper.insert(seedLog);
     }

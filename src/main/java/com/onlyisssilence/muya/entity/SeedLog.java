@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class SeedLog implements Serializable {
 
     //日志ID
-    private String logId;
+    private String id;
 
     //城市ID
     private String cityCode;
@@ -21,38 +21,42 @@ public class SeedLog implements Serializable {
     // 用户ID
     private String uid;
 
+    // 埋点内容
+    private String seedId;
+
     // 日志埋点时间
     private String seedTime;
 
     // 日志创建时间
     private String createTime;
 
+    // 操作系统版本
+    private String osVersion;
+
+    // 手机类型
+    private String phoneModel;
+
     @Override
     public String toString() {
         return "SeedLog{" +
-                "logId='" + logId + '\'' +
+                "id='" + id + '\'' +
                 ", cityCode='" + cityCode + '\'' +
                 ", version='" + version + '\'' +
                 ", uid='" + uid + '\'' +
-                ", seedTime=" + seedTime +
-                ", createTime=" + createTime +
+                ", seedId='" + seedId + '\'' +
+                ", seedTime='" + seedTime + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", osVersion='" + osVersion + '\'' +
+                ", phoneModel='" + phoneModel + '\'' +
                 '}';
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getId() {
+        return id;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getLogId() {
-        return logId;
-    }
-
-    public void setLogId(String logId) {
-        this.logId = logId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCityCode() {
@@ -79,6 +83,14 @@ public class SeedLog implements Serializable {
         this.uid = uid;
     }
 
+    public String getSeedId() {
+        return seedId;
+    }
+
+    public void setSeedId(String seedId) {
+        this.seedId = seedId;
+    }
+
     public String getSeedTime() {
         return seedTime;
     }
@@ -87,5 +99,27 @@ public class SeedLog implements Serializable {
         this.seedTime = seedTime;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
 
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getOsVersion() {
+        return osVersion;
+    }
+
+    public void setOsVersion(String osVersion) {
+        this.osVersion = osVersion;
+    }
+
+    public String getPhoneModel() {
+        return phoneModel;
+    }
+
+    public void setPhoneModel(String phoneModel) {
+        this.phoneModel = phoneModel;
+    }
 }

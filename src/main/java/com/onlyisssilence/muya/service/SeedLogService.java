@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface SeedLogService {
 
+    boolean insertList(List<SeedLog> seedLogs);
+
     int insert(SeedLog seedLog);
 
     SeedLog queryLogById(String logId);

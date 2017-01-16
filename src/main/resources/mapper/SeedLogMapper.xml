@@ -5,28 +5,30 @@
 <mapper namespace="com.onlyisssilence.muya.dao.SeedLogMapper">
 
     <resultMap id="BaseResultMap" type="com.onlyisssilence.muya.entity.SeedLog">
-        <id column="log_id" property="logId" jdbcType="VARCHAR"/>
+        <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="TINYINT"/>
         <result column="uid" property="uid" jdbcType="VARCHAR"/>
         <result column="seed_time" property="seedTime" jdbcType="TIMESTAMP"/>
         <result column="create_name" property="createName" jdbcType="TIMESTAMP"/>
+        <result column="seed_id" property="seedId" jdbcType="VARCHAR"/>
+        <result column="os_version" property="osVersion" jdbcType="VARCHAR"/>
+        <result column="phone_model" property="phoneModel" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        log_id,city_code,version,uid,seed_time,create_time
+        id,city_code,version,uid,seed_time,create_time,seed_id,os_version,phone_model
     </sql>
 
-
     <!-- 根据logId查询单条log语句 -->
-    <select id="queryByLogId" resultMap="BaseResultMap" parameterType="long">
+    <select id="queryByLogId" resultMap="BaseResultMap" parameterType="String">
         <!-- 具体的sql -->
         SELECT
         <include refid="Base_Column_List"/>
         FROM
         seed_log
         WHERE
-        log_id = #{logId}
+        id = #{logId}
     </select>
 
     <!-- 查询所有的log数据 -->
@@ -37,13 +39,61 @@
     </select>
 
     <insert id="insert" parameterType="com.onlyisssilence.muya.entity.SeedLog">
-        insert into seed_log (log_id,city_code,version,uid,seed_time)
-        values (#{logId,jdbcType=VARCHAR},
+        insert into seed_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="cityCode != null">
+                city_code,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="seedTime != null">
+                seed_time,
+            </if>
+            <if test="seedId != null">
+                seed_id,
+            </if>
+            <if test="osVersion != null">
+                os_version,
+            </if>
+            <if test="phoneModel != null">
+                phone_model,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="cityCode != null">
                 #{cityCode,jdbcType=VARCHAR},
-                #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=TINYINT},
+            </if>
+            <if test="uid != null">
                 #{uid,jdbcType=VARCHAR},
-                #{seedTime,jdbcType=TIMESTAMP})
+            </if>
+            <if test="seedTime != null">
+                #{seedTime,jdbcType=TINYINT},
+            </if>
+            <if test="seedId != null">
+                #{seedId,jdbcType=VARCHAR},
+            </if>
+            <if test="osVersion != null">
+                #{osVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                #{phoneModel,jdbcType=SMALLINT},
+            </if>
+        </trim>
     </insert>
+
 
 </mapper>
 
